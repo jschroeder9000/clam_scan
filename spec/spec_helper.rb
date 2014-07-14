@@ -14,6 +14,13 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+# end intro stuff
+
+require 'clam_scan'
+
+Dir[File.expand_path(File.join('..', 'support', '**', '*.rb'), __FILE__)].each { |f| require f }
+
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
@@ -73,5 +80,41 @@ RSpec.configure do |config|
     # Prevents you from mocking or stubbing a method that does not exist on
     # a real object. This is generally recommended.
     mocks.verify_partial_doubles = true
+  end
+
+  # end default init stuff
+
+  config.before(:suite) do
+    # make data dir if it doesn't exist
+    unless File.directory? data_path
+      require 'fileutils'
+      FileUtils.mkdir_p data_path
+    end
+
+    # get eicar sample file if we don't have it
+    unless File.exist? eicar_path
+      require 'net/http'
+      Net::HTTP.start('www.eicar.org') do |http|
+        resp = http.get('/download/eicar.com')
+        File.open(eicar_path, 'wb') do |file|
+          file.write(resp.body)
+        end
+      end
+    end
+
+    # make a safe file if we don't have it
+    unless File.exist? safe_path
+      File.open(safe_path, 'w') do |file|
+        file.write 'bar'
+      end
+    end
+  end
+
+  config.before(:each) do
+    # reset to sane defaults, maybe override from ENV
+    ClamScan.configure do |clam_config|
+      clam_config.reset!
+      clam_config.client_location = 'clamdscan'
+    end
   end
 end

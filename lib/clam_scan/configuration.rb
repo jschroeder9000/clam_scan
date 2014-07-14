@@ -1,11 +1,17 @@
 module ClamScan
   class Configuration
+    attr_accessor :default_scan_options
     attr_accessor :client_location
-    attr_accessor :raise_on_error
+    attr_accessor :raise_unless_safe
 
     def initialize
-      @client_location = 'clamscan'
-      @raise_on_error  = false
+      @default_scan_options       = {stdout: true}
+      @client_location            = 'clamscan'
+      @raise_unless_safe          = false
+    end
+
+    def reset!
+      initialize
     end
   end
 end

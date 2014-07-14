@@ -1,10 +1,11 @@
 module ClamScan
   class Response
     attr_accessor :output
+    attr_accessor :process_status
 
-    def initialize (status, output)
+    def initialize (process_status, output)
       @output = output
-      @status = status
+      @process_status = process_status
     end
 
     def body
@@ -12,26 +13,32 @@ module ClamScan
     end
 
     def error?
-      @status.exitstatus == 2
+      status == :error
     end
 
     def safe?
-      @status.exitstatus == 0
+      status == :safe
     end
 
     def status
-      return :error   if error?
-      return :safe    if safe?
-      return :virus   if virus?
-      return :unknown
+      case @process_status.exitstatus
+        when 0
+          :safe
+        when 1
+          :virus
+        when 2
+          :error
+        else
+          :unknown
+      end
     end
 
     def unknown?
-      !error? && !safe? && !virus?
+      status == :unknown
     end
 
     def virus?
-      @status.exitstatus == 1
+      status == :virus
     end
   end
 end
