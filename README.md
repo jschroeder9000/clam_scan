@@ -37,9 +37,7 @@ You will also need ClamAV (and optionally the ClamAV daemon) installed.  On Ubun
 
 Other *nix systems can do the equivalent from their respective package manager or install from source.  Mac users should be able to something equivalent with homebrew.  Windows... good luck.
 
-If you _really_ have an aversion to installing the daemon on your development machine, that's OK, but be aware that using the daemon can be literally thousands of orders of magnitude faster for scanning small files because it doesn't have to load the virus database every time a scan is initiated.
-
-Make sure to set `client_location` to the path to `clamdscan` to get the benefits it offers (see below).
+If you _really_ have an aversion to installing the daemon on your development machine, that's OK, but be aware that using the daemon can be literally thousands of orders of magnitude faster for scanning small files because it doesn't have to load the virus database every time a scan is initiated.  You'll also need to set `client_location` to point to clamscan (see below).
 
 ## Usage
 
@@ -53,9 +51,9 @@ ClamScan.configure do |config|
   config.default_scan_options       = {stdout: true} # default (request all output to be sent to STDOUT so it can be captured)
 
   # path to clamscan/clamdscan client
-  # defaults to 'clamscan' for ease of use in development
-  # recommended to set to an absolute path to clamdscan for production
-  config.client_location            = 'clamscan' # default
+  # try `which clamdscan` or `which clamscan` in your shell to see where you should point this to
+  # recommended to set to an absolute path to clamdscan
+  config.client_location            = '/usr/bin/clamdscan' # default
 
   # if set to true, ClamScan will raise an exception
   # unless a scan is successful and no viruses were found

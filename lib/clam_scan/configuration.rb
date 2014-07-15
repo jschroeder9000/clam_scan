@@ -6,7 +6,7 @@ module ClamScan
 
     def initialize
       @default_scan_options       = {stdout: true}
-      @client_location            = 'clamscan'
+      @client_location            = '/usr/bin/clamdscan'
       @raise_unless_safe          = false
     end
 
