@@ -1,8 +1,8 @@
 module ClamScan
   class Client
     class << self
-      def scan (*args)
-        response = Request.send(*args)
+      def scan (opts={})
+        response = Request.send(opts)
 
         if ::ClamScan.configuration.raise_unless_safe
           if response.virus?
