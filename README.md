@@ -85,7 +85,7 @@ response.error?   # true if scan returned with a known error status
 response.unknown? # true if scan returned with an unknown status
 response.status   # one of [:error, :safe, :unknown, :virus]
 
-# one-liner appropriate for most situations
+# short snippet appropriate for most situations
 unless ClamScan::Client.scan(location: '/path/to/file').safe?
   # do something
 end
@@ -110,6 +110,19 @@ ClamScan::Client.scan(custom_args: args)
 
 ClamScan _should_ support and validate any arguments supported by ClamAV 0.98.  See lib/request.rb and ClamAV's man page.
 
+### Deleting infected files
+
+ClamScan does _not_ delete infected files by default, conforming with the defaults of clamscan/clamdscan.  If you want that behaviour, you can do something like:
+
+```ruby
+ClamScan.configure do |config|
+  # merge instead of re-assign so as to not blow away {stdout: true} default
+  config.default_scan_options.merge {remove: 'yes'}
+end
+```
+
+Or you could arrange to have them moved or copied somewhere.  See `man clamscan`.
+
 ### Exceptions
 
 Any exception raised by ClamScan _should_ be a subclass of `ClamScan::Error`.
@@ -120,7 +133,19 @@ If `config.raise_unless_safe` is true, a `ClamScan::VirusDetected`, `ClamScan::U
 
 ### Rails
 
-TODO: example usage in rails
+ClamScan is a pure ruby wrapper and thus can be used in any ruby project, including one using rails.
+
+```ruby
+# add virus-free validation with carrierwave
+validate :virus_free
+
+def virus_free
+  if self.file.present? && !ClamScan::Client.scan(location: self.file.url).safe?
+    File.delete(self.file.url)
+    errors.add(:file, 'That file can not be accepted')
+  end
+end
+```
 
 ## Contributing
 
