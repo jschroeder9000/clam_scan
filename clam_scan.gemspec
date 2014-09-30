@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = ClamScan::VERSION
   spec.authors       = ["John Schroeder"]
   spec.email         = ["jschroeder@multiadsolutions.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Ruby wrapper for ClamAV's clamscan/clamdscan.}
+  spec.description   = %q{Ruby wrapper for ClamAV's clamscan/clamdscan.}
+  spec.homepage      = "https://github.com/jschroeder9000/clam_scan"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
