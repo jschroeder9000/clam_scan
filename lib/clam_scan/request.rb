@@ -27,6 +27,7 @@ module ClamScan
       BOOLEAN_ARGS = %w(
         allmatch
         bell
+        fdpass
         infected
         leave_temps
         no_summary
