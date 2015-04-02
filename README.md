@@ -106,7 +106,7 @@ args = ['--recursive', '--max-recursion=5', '/path/to'dir']
 ClamScan::Client.scan(custom_args: args)
 ```
 
-ClamScan _should_ support and validate any arguments supported by ClamAV 0.98.  See lib/request.rb and ClamAV's man page.
+ClamScan _should_ support and validate any arguments supported by ClamAV 0.98.  See `lib/clam_scan/request.rb` and ClamAV's man page.
 
 ### Deleting infected files
 
